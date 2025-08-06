@@ -1,0 +1,23 @@
+.nav-bar-container {
+	margin-inline-end: 2rem;
+}
+
+.nav-bar {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+	gap: 2rem;
+	margin-inline-end: 2rem;
+}
+
+.nav-bar a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.nav-bar a:hover {
+  color: var(--primary-color);
+}

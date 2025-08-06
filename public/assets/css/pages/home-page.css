@@ -1,0 +1,30 @@
+.home {
+    margin-block-start: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home img {
+    width: 650px;
+}
+
+.home .right {
+    align-self: flex-end;
+}
+
+.home .right h1 {
+    text-align: center;
+    font-size: 4rem;
+}
+
+.heading {
+    color: var(--primary-color);
+    font-size: 32px;
+    text-align: center;
+    padding-bottom: 10px;
+    display: inline-block;
+    line-height: 1.2;
+    letter-spacing: 1px;
+}
