@@ -53,8 +53,7 @@ function query(filterBy, sortBy) {
 	return Promise.resolve({ bugs, totalPageSize })
 }
 
-function save(bug, user) {
-	console.log(bug)
+function save(bug, userId) {
 	if (bug._id) {
 		if (bug.creator._id !== userId) return Promise.reject('You can not update bug, another creator id')
 		const idx = gBugs.findIndex(currBug => currBug._id === bug._id)
@@ -63,7 +62,6 @@ function save(bug, user) {
 		bug.imgSrc = 'assets/img/bugs/bug1.jpg'
 		bug.labels = ['famous', 'need-CR']
 		bug.description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at.'
-		bug.creator = { _id: user._id, fullname: user.fullname }
 		bug.createdAt = Date.now()
 		bug._id = utilService.makeId()
 		gBugs.push(bug)

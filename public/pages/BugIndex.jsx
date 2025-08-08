@@ -50,7 +50,6 @@ export function BugIndex() {
 		bugService
 			.remove(bugId)
 			.then(() => {
-				console.log('Deleted Succesfully!')
 				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
 			})
@@ -66,7 +65,7 @@ export function BugIndex() {
 			title: prompt('Bug title?'),
 			severity: +prompt('Bug severity?'),
 		}
-		console.log('from add bug', bug)
+
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
 
 		bugService

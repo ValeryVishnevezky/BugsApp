@@ -16,7 +16,6 @@ export function LoginSignup({ setUser, onClose }) {
 	}
 
 	function onLogin(credentials) {
-		console.log('from onLogin', credentials)
 		authService
 			.login(credentials)
 			.then(setUser)
@@ -30,7 +29,6 @@ export function LoginSignup({ setUser, onClose }) {
 	}
 
 	function onSignup(credentials) {
-		console.log('from onSignup', credentials)
 		authService
 			.signup(credentials)
 			.then(setUser)

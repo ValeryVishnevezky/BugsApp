@@ -71,7 +71,6 @@ app.delete('/api/bug/:bugId', (req, res) => {
 	if (!loggedinUser) return res.status(401).send(`Logged in user is not valid`)
 
 	const { bugId } = req.params
-	console.log(loggedinUser._id)
 	bugService
 		.remove(bugId, loggedinUser._id)
 		.then(() => res.send(`Bug id: ${bugId} deleted`))
@@ -83,8 +82,7 @@ app.delete('/api/bug/:bugId', (req, res) => {
 
 // Create Bug
 app.post('/api/bug', (req, res) => {
-	const loggedinUser = authService.validateLoginToken(req.cookies.add)
-	console.log('Logged in user:', loggedinUser)
+	const loggedinUser = authService.validateLoginToken(req.cookies.loginToken)	
 	if (!loggedinUser) return res.status(401).send(`Logged in user is not valid`)
 
 	const bug = req.body
@@ -107,7 +105,7 @@ app.put('/api/bug', (req, res) => {
 
 	const bug = req.body
 	bugService
-		.save(bug, loggedinUser)
+		.save(bug, loggedinUser._id)
 		.then((savedBug) => res.send(savedBug))
 		.catch((err) => {
 			loggerService.error('[POST BUG] Cannot update bug', err)

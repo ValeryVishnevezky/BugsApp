@@ -10,8 +10,6 @@ export function BugSort({ onSetSort, sortBy }) {
   function handleChange({ target }) {
     const field = target.name
     const value = target.type === 'number' ? +target.value : target.value
-    console.log('field:', field)
-    console.log('value:', value)
     if (field === 'desc')
       setSortByToEdit(prevSort => ({
         ...prevSort,
