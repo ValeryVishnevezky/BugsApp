@@ -2,12 +2,12 @@ const { useState, useRef, useEffect } = React
 
 import { BugList } from '../cmps/BugList.jsx'
 import { bugService } from '../services/bug.service.js'
-import { userService } from '../services/user.service.js'
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event.bus.service.js'
+import { authService } from '../services/auth.service.js'
 const { useNavigate } = ReactRouterDOM
 
 export function UserProfile() {
-	const [user, setUser] = useState(userService.getLoggedInUser())
+	const [user, setUser] = useState(authService.getLoggedInUser())
 	const [bugs, setBugs] = useState([])
 	const navigate = useNavigate()
 
@@ -22,10 +22,10 @@ export function UserProfile() {
 	function loadUserBugs() {
 		bugService
 			.query({ userId: user._id })
-			.then((res) => {
+			.then(res => {
 				setBugs(res.bugs)
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from load user bugs')
 				console.error('Error: Something went wrong with load user bugs \n', err)
 				showErrorMsg('Cannot load your bugs')
@@ -37,10 +37,10 @@ export function UserProfile() {
 			.remove(bugId)
 			.then(() => {
 				console.log('Deleted Succesfully!')
-				setBugs((prevBugs) => prevBugs.filter((bug) => bug._id !== bugId))
+				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from remove user bug')
 				console.error('Error: Something went wrong with remove user bug \n', err)
 				showErrorMsg('Cannot remove your bug')
@@ -52,12 +52,12 @@ export function UserProfile() {
 		const bugToSave = { ...bug, severity }
 		bugService
 			.save(bugToSave)
-			.then((savedBug) => {
+			.then(savedBug => {
 				console.log('Updated Bug:', savedBug)
-				setBugs((prevBugs) => prevBugs.map((currBug) => (currBug._id === savedBug._id ? savedBug : currBug)))
+				setBugs(prevBugs => prevBugs.map(currBug => (currBug._id === savedBug._id ? savedBug : currBug)))
 				showSuccessMsg('Bug updated')
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from edit user bug')
 				console.error('Error: Something went wrong with edit user bug \n', err)
 				showErrorMsg('Cannot update your bug')
@@ -66,7 +66,7 @@ export function UserProfile() {
 
 	if (!user) return null
 	return (
-		<section className="user-profile main-layout">
+		<section className='user-profile main-layout'>
 			<h1>Hello {user.fullname}</h1>
 
 			{!bugs || (!bugs.length && <h2>No bugs to show</h2>)}

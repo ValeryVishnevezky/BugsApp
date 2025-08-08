@@ -1,8 +1,7 @@
-import { storageService } from './async-storage.service.js'
+import { storageService } from './async.storage.service.js'
 
 const BASE_URL = `/api/bug/`
 const STORAGE_KEY = 'bugDB'
-let gPageIdx = 0
 
 export const bugService = {
 	query,

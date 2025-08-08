@@ -1,5 +1,13 @@
+const Router = ReactRouterDOM.BrowserRouter
+const { Provider } = ReactRedux
+
+import { store } from './store/store.js'
 import { App } from './RootCmp.jsx'
 
-const elContainer = document.getElementById('root')
-const root = ReactDOM.createRoot(elContainer)
-root.render(<App />);
+ReactDOM.createRoot(document.getElementById('root')).render(
+	<Provider store={store}>
+		<Router>
+			<App />
+		</Router>
+	</Provider>
+)

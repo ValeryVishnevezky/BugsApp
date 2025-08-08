@@ -3,7 +3,7 @@ import { BugFilter } from '../cmps/BugFilter.jsx'
 import { BugList } from '../cmps/BugList.jsx'
 import { BugSort } from '../cmps/BugSort.jsx'
 import { bugService } from '../services/bug.service.js'
-import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
+import { showSuccessMsg, showErrorMsg } from '../services/event.bus.service.js'
 
 export function BugIndex() {
 	const [bugs, setBugs] = useState([])
@@ -22,7 +22,7 @@ export function BugIndex() {
 				setBugs(bugs)
 				setTotalPageSize(totalPageSize)
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from load bugs')
 				console.error('Error: Something went wrong with load bugs \n', err)
 				showErrorMsg('Cannot load bugs')
@@ -30,15 +30,15 @@ export function BugIndex() {
 	}
 
 	function onSetFilter(filterBy) {
-		setFilterBy((prevFilter) => ({ ...prevFilter, ...filterBy }))
+		setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
 	}
 
 	function onSetSort(sortBy) {
-		setSortBy((prevSort) => ({ ...prevSort, ...sortBy }))
+		setSortBy(prevSort => ({ ...prevSort, ...sortBy }))
 	}
 
 	function onChangePageIdx(diff) {
-		setFilterBy((prevFilter) => {
+		setFilterBy(prevFilter => {
 			let newPageIdx = prevFilter.pageIdx + diff
 			if (newPageIdx < 0) newPageIdx = totalPageSize
 			if (newPageIdx > totalPageSize) newPageIdx = 0
@@ -51,10 +51,10 @@ export function BugIndex() {
 			.remove(bugId)
 			.then(() => {
 				console.log('Deleted Succesfully!')
-				setBugs((prevBugs) => prevBugs.filter((bug) => bug._id !== bugId))
+				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from remove bug')
 				console.error('Error: Something went wrong with remove bug \n', err)
 				showErrorMsg('Cannot remove bug')
@@ -65,21 +65,17 @@ export function BugIndex() {
 		const bug = {
 			title: prompt('Bug title?'),
 			severity: +prompt('Bug severity?'),
-			imgSrc: 'assets/img/bugs/bug1.jpg',
-			labels: ['famous', 'need-CR'],
-			description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at.',
-			createdAt: Date.now(),
 		}
-
+		console.log('from add bug', bug)
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
 
 		bugService
 			.save(bug)
-			.then((savedBug) => {
-				setBugs((prevBugs) => [...prevBugs, savedBug])
+			.then(savedBug => {
+				setBugs(prevBugs => [...prevBugs, savedBug])
 				showSuccessMsg('Bug added')
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from add bug')
 				console.error('Error: Something went wrong with add bug \n', err)
 				showErrorMsg('Cannot add bug')
@@ -91,11 +87,11 @@ export function BugIndex() {
 		const bugToSave = { ...bug, severity }
 		bugService
 			.save(bugToSave)
-			.then((savedBug) => {
-				setBugs((prevBugs) => prevBugs.map((currBug) => (currBug._id === savedBug._id ? savedBug : currBug)))
+			.then(savedBug => {
+				setBugs(prevBugs => prevBugs.map(currBug => (currBug._id === savedBug._id ? savedBug : currBug)))
 				showSuccessMsg('Bug updated')
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from edit bug')
 				console.error('Error: Something went wrong with edit bug \n', err)
 				showErrorMsg('Cannot update bug')
@@ -105,7 +101,7 @@ export function BugIndex() {
 	function onDownloadBudsPdf() {
 		bugService
 			.downloadBudsPdf()
-			.then((pdfBlob) => {
+			.then(pdfBlob => {
 				const url = window.URL.createObjectURL(pdfBlob)
 				const link = document.createElement('a')
 				link.href = url
@@ -114,7 +110,7 @@ export function BugIndex() {
 				link.click()
 				link.remove()
 			})
-			.catch((err) => {
+			.catch(err => {
 				console.log('from download bugs PDF')
 				console.error('Error: Something went wrong with download bugs PDF \n', err)
 				showErrorMsg('Cannot download bugs PDF')
@@ -122,20 +118,20 @@ export function BugIndex() {
 	}
 
 	return (
-		<section className="main-layout">
+		<section className='main-layout'>
 			<BugFilter onSetFilter={onSetFilter} filterBy={filterBy} />
 			<BugSort onSetSort={onSetSort} sortBy={sortBy} />
-			<button className="btn" onClick={onAddBug}>
+			<button className='btn' onClick={onAddBug}>
 				Add Bug
 			</button>
-			<button className="btn btn-download" onClick={onDownloadBudsPdf}>
+			<button className='btn btn-download' onClick={onDownloadBudsPdf}>
 				Download PDF
 			</button>
 
 			<BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
-			<div className="paging flex">
+			<div className='paging flex'>
 				<button
-					className="btn"
+					className='btn'
 					onClick={() => {
 						onChangePageIdx(-1)
 					}}
@@ -144,7 +140,7 @@ export function BugIndex() {
 				</button>
 				<span>{filterBy.pageIdx + 1}</span>
 				<button
-					className="btn"
+					className='btn'
 					onClick={() => {
 						onChangePageIdx(1)
 					}}

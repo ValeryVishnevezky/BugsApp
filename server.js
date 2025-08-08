@@ -84,6 +84,7 @@ app.delete('/api/bug/:bugId', (req, res) => {
 // Create Bug
 app.post('/api/bug', (req, res) => {
 	const loggedinUser = authService.validateLoginToken(req.cookies.add)
+	console.log('Logged in user:', loggedinUser)
 	if (!loggedinUser) return res.status(401).send(`Logged in user is not valid`)
 
 	const bug = req.body
@@ -105,9 +106,8 @@ app.put('/api/bug', (req, res) => {
 	if (!loggedinUser) return res.status(401).send(`Logged in user is not valid`)
 
 	const bug = req.body
-
 	bugService
-		.save(bug, loggedinUser._id)
+		.save(bug, loggedinUser)
 		.then((savedBug) => res.send(savedBug))
 		.catch((err) => {
 			loggerService.error('[POST BUG] Cannot update bug', err)
@@ -198,7 +198,6 @@ app.post('/api/auth/login', (req, res) => {
 app.post('/api/auth/logout', (req, res) => {
 	res.clearCookie('loginToken')
 	res.send('logged-out')
-	// loggerService.info('[LOGOUT] User logged out')
 })
 
 // Fallback route

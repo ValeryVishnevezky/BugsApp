@@ -1,5 +1,5 @@
-import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
-import { userService } from '../services/user.service.js'
+import { showErrorMsg, showSuccessMsg } from '../services/event.bus.service.js'
+import { authService } from '../services/auth.service.js'
 import { LoginForm } from './LoginForm.jsx'
 
 const { useState } = React
@@ -12,11 +12,12 @@ export function LoginSignup({ setUser, onClose }) {
 	function onLoginSignup(credentials) {
 		isSignup ? onSignup(credentials) : onLogin(credentials)
 		onClose()
-		navigate('/bug', { replace: true })
+		navigate('/bug')
 	}
 
 	function onLogin(credentials) {
-		userService
+		console.log('from onLogin', credentials)
+		authService
 			.login(credentials)
 			.then(setUser)
 			.then(() => {
@@ -29,7 +30,8 @@ export function LoginSignup({ setUser, onClose }) {
 	}
 
 	function onSignup(credentials) {
-		userService
+		console.log('from onSignup', credentials)
+		authService
 			.signup(credentials)
 			.then(setUser)
 			.then(() => {

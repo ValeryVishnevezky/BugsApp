@@ -2,17 +2,17 @@ const { useState, useEffect } = React
 const { NavLink, useNavigate, Outlet } = ReactRouterDOM
 import { UserMsg } from './UserMsg.jsx'
 import { LoginSignup } from './LoginSignup.jsx'
-import { userService } from '../services/user.service.js'
+import { authService } from '../services/auth.service.js'
 
 export function AppHeader() {
-	const [user, setUser] = useState(userService.getLoggedInUser())
+	const [user, setUser] = useState(authService.getLoggedInUser())
 	const [isLogin, setIsLogin] = useState(false)
 	const navigate = useNavigate()
 
 	function onLogout() {
-		userService.logout().then(() => {
+		authService.logout().then(() => {
 			setUser(null)
-			navigate('/', { replace: true })
+			navigate('/')
 		})
 	}
 

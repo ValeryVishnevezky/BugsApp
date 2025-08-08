@@ -1,4 +1,3 @@
-const Router = ReactRouterDOM.HashRouter
 // const Router = ReactRouterDOM.BrowserRouter
 const { Route, Routes } = ReactRouterDOM
 
@@ -13,7 +12,6 @@ import { AdminDashboard } from './pages/AdminDashboard.jsx'
 
 export function App() {
 	return (
-		<Router>
 			<div className='app-container'>
 				<AppHeader />
 				<main>
@@ -28,6 +26,5 @@ export function App() {
 				</main>
 				<AppFooter />
 			</div>
-		</Router>
 	)
 }

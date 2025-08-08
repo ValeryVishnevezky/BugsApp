@@ -20,17 +20,17 @@ function query(filterBy, sortBy) {
 	// SS - Filter~
 	if (filterBy.txt) {
 		const regex = new RegExp(filterBy.txt, 'i')
-		bugs = gBugs.filter((bug) => regex.test(bug.title))
+		bugs = gBugs.filter(bug => regex.test(bug.title))
 	}
 	if (filterBy.severity) {
-		bugs = bugs.filter((bug) => bug.severity >= filterBy.severity)
+		bugs = bugs.filter(bug => bug.severity >= filterBy.severity)
 	}
 	if (filterBy.labels) {
 		const labelsToFilter = filterBy.labels
-		bugs = bugs.filter((bug) => labelsToFilter.some((label) => bug.labels.includes(label)))
+		bugs = bugs.filter(bug => labelsToFilter.some(label => bug.labels.includes(label)))
 	}
 	if (filterBy.userId) {
-		bugs = bugs.filter((bug) => bug.creator._id === filterBy.userId)
+		bugs = bugs.filter(bug => bug.creator._id === filterBy.userId)
 	}
 
 	// sort
@@ -53,13 +53,18 @@ function query(filterBy, sortBy) {
 	return Promise.resolve({ bugs, totalPageSize })
 }
 
-function save(bug, userId) {
+function save(bug, user) {
 	console.log(bug)
 	if (bug._id) {
 		if (bug.creator._id !== userId) return Promise.reject('You can not update bug, another creator id')
-		const idx = gBugs.findIndex((currBug) => currBug._id === bug._id)
+		const idx = gBugs.findIndex(currBug => currBug._id === bug._id)
 		gBugs[idx] = bug
 	} else {
+		bug.imgSrc = 'assets/img/bugs/bug1.jpg'
+		bug.labels = ['famous', 'need-CR']
+		bug.description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel, earum sed corrupti voluptatum voluptatem at.'
+		bug.creator = { _id: user._id, fullname: user.fullname }
+		bug.createdAt = Date.now()
 		bug._id = utilService.makeId()
 		gBugs.push(bug)
 	}
@@ -67,7 +72,7 @@ function save(bug, userId) {
 }
 
 function remove(bugId, userId) {
-	const idx = gBugs.findIndex((bug) => bug._id === bugId)
+	const idx = gBugs.findIndex(bug => bug._id === bugId)
 	if (idx === -1) return Promise.reject('No bug found to remove')
 	if (gBugs[idx].creator._id !== userId) return Promise.reject('Can not remove bug, another creator id')
 	gBugs.splice(idx, 1)
@@ -75,7 +80,7 @@ function remove(bugId, userId) {
 }
 
 function getById(bugId) {
-	const bug = gBugs.find((bug) => bug._id === bugId)
+	const bug = gBugs.find(bug => bug._id === bugId)
 	if (!bug) return Promise.reject('No bug found')
 	else return Promise.resolve(bug)
 }
@@ -87,7 +92,7 @@ function getPdf(res) {
 
 function _saveBugsToFile() {
 	return new Promise((resolve, reject) => {
-		fs.writeFile('data/bug.json', JSON.stringify(gBugs, null, 2), (err) => {
+		fs.writeFile('data/bug.json', JSON.stringify(gBugs, null, 2), err => {
 			if (err) {
 				console.log(err)
 				reject('Cannot write to file')
