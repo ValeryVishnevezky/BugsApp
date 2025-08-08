@@ -7,66 +7,71 @@ import { showErrorMsg, showSuccessMsg } from '../services/event-bus.service.js'
 const { useNavigate } = ReactRouterDOM
 
 export function UserProfile() {
-  const [user, setUser] = useState(userService.getLoggedInUser())
-  const [bugs, setBugs] = useState([])
-  const navigate = useNavigate()
+	const [user, setUser] = useState(userService.getLoggedInUser())
+	const [bugs, setBugs] = useState([])
+	const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!user) {
-      navigate('/')
-      return
-    }
-    loadUserBugs()
-  }, [user])
+	useEffect(() => {
+		if (!user) {
+			navigate('/')
+			return
+		}
+		loadUserBugs()
+	}, [user])
 
-  function loadUserBugs() {
-    bugService.query({ userId: user._id }).then(res => {
-      setBugs(res.bugs)
-    })
-  }
+	function loadUserBugs() {
+		bugService
+			.query({ userId: user._id })
+			.then((res) => {
+				setBugs(res.bugs)
+			})
+			.catch((err) => {
+				console.log('from load user bugs')
+				console.error('Error: Something went wrong with load user bugs \n', err)
+				showErrorMsg('Cannot load your bugs')
+			})
+	}
 
-  function onRemoveBug(bugId) {
-    bugService
-      .remove(bugId)
-      .then(() => {
-        console.log('Deleted Succesfully!')
-        setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
-        showSuccessMsg('Bug removed')
-      })
-      .catch(err => {
-        console.log('from remove bug', err)
-        showErrorMsg('Cannot remove bug')
-      })
-  }
+	function onRemoveBug(bugId) {
+		bugService
+			.remove(bugId)
+			.then(() => {
+				console.log('Deleted Succesfully!')
+				setBugs((prevBugs) => prevBugs.filter((bug) => bug._id !== bugId))
+				showSuccessMsg('Bug removed')
+			})
+			.catch((err) => {
+				console.log('from remove user bug')
+				console.error('Error: Something went wrong with remove user bug \n', err)
+				showErrorMsg('Cannot remove your bug')
+			})
+	}
 
-  function onEditBug(bug) {
-    const severity = +prompt('New severity?')
-    const bugToSave = { ...bug, severity }
-    bugService
-      .save(bugToSave)
-      .then(savedBug => {
-        console.log('Updated Bug:', savedBug)
-        setBugs(prevBugs =>
-          prevBugs.map(currBug =>
-            currBug._id === savedBug._id ? savedBug : currBug
-          )
-        )
-        showSuccessMsg('Bug updated')
-      })
-      .catch(err => {
-        console.log('from edit bug', err)
-        showErrorMsg('Cannot update bug')
-      })
-  }
+	function onEditBug(bug) {
+		const severity = +prompt('New severity?')
+		const bugToSave = { ...bug, severity }
+		bugService
+			.save(bugToSave)
+			.then((savedBug) => {
+				console.log('Updated Bug:', savedBug)
+				setBugs((prevBugs) => prevBugs.map((currBug) => (currBug._id === savedBug._id ? savedBug : currBug)))
+				showSuccessMsg('Bug updated')
+			})
+			.catch((err) => {
+				console.log('from edit user bug')
+				console.error('Error: Something went wrong with edit user bug \n', err)
+				showErrorMsg('Cannot update your bug')
+			})
+	}
 
-  if (!user) return null
-  return (
-    <section className="user-profile main-layout">
-      <h1>Hello {user.fullname}</h1>
+	if (!user) return null
+	return (
+		<section className="user-profile main-layout">
+			<h1>Hello {user.fullname}</h1>
 
-      {!bugs || (!bugs.length && <h2>No bugs to show</h2>)}
-      {bugs && bugs.length > 0 && <h3>Manage your bugs</h3>}
-      <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
-    </section>
-  )
+			{!bugs || (!bugs.length && <h2>No bugs to show</h2>)}
+			{bugs && bugs.length > 0 && <h3>Manage your bugs</h3>}
+			<BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+		</section>
+	)
 }

@@ -12,7 +12,7 @@ export function AppHeader() {
 	function onLogout() {
 		userService.logout().then(() => {
 			setUser(null)
-			navigate('/')
+			navigate('/', { replace: true })
 		})
 	}
 
@@ -38,7 +38,7 @@ export function AppHeader() {
 							<React.Fragment>
 								<div className="backdrop" onClick={() => setIsLogin(false)}></div>
 								<section className="login-modal" onClick={(ev) => ev.stopPropagation()}>
-									<LoginSignup setUser={setUser} />
+									<LoginSignup setUser={setUser} onClose={() => setIsLogin(false)} />
 								</section>
 							</React.Fragment>
 						)}

@@ -16,10 +16,17 @@ export function BugIndex() {
 	}, [filterBy, sortBy])
 
 	function loadBugs() {
-		bugService.query(filterBy, sortBy).then(({ bugs, totalPageSize }) => {
-			setBugs(bugs)
-			setTotalPageSize(totalPageSize)
-		})
+		bugService
+			.query(filterBy, sortBy)
+			.then(({ bugs, totalPageSize }) => {
+				setBugs(bugs)
+				setTotalPageSize(totalPageSize)
+			})
+			.catch((err) => {
+				console.log('from load bugs')
+				console.error('Error: Something went wrong with load bugs \n', err)
+				showErrorMsg('Cannot load bugs')
+			})
 	}
 
 	function onSetFilter(filterBy) {
@@ -48,7 +55,8 @@ export function BugIndex() {
 				showSuccessMsg('Bug removed')
 			})
 			.catch((err) => {
-				console.log('from remove bug', err)
+				console.log('from remove bug')
+				console.error('Error: Something went wrong with remove bug \n', err)
 				showErrorMsg('Cannot remove bug')
 			})
 	}
@@ -64,15 +72,16 @@ export function BugIndex() {
 		}
 
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
-		
-			bugService
+
+		bugService
 			.save(bug)
 			.then((savedBug) => {
 				setBugs((prevBugs) => [...prevBugs, savedBug])
 				showSuccessMsg('Bug added')
 			})
 			.catch((err) => {
-				console.log('from add bug', err)
+				console.log('from add bug')
+				console.error('Error: Something went wrong with add bug \n', err)
 				showErrorMsg('Cannot add bug')
 			})
 	}
@@ -87,15 +96,29 @@ export function BugIndex() {
 				showSuccessMsg('Bug updated')
 			})
 			.catch((err) => {
-				console.log('from edit bug', err)
+				console.log('from edit bug')
+				console.error('Error: Something went wrong with edit bug \n', err)
 				showErrorMsg('Cannot update bug')
 			})
 	}
 
 	function onDownloadBudsPdf() {
-		bugService.downloadBudsPdf().then(() => {
-			showSuccessMsg(`Bugs PDF download!`)
-		})
+		bugService
+			.downloadBudsPdf()
+			.then((pdfBlob) => {
+				const url = window.URL.createObjectURL(pdfBlob)
+				const link = document.createElement('a')
+				link.href = url
+				link.setAttribute('download', 'Bugs.pdf')
+				document.body.appendChild(link)
+				link.click()
+				link.remove()
+			})
+			.catch((err) => {
+				console.log('from download bugs PDF')
+				console.error('Error: Something went wrong with download bugs PDF \n', err)
+				showErrorMsg('Cannot download bugs PDF')
+			})
 	}
 
 	return (
@@ -103,9 +126,9 @@ export function BugIndex() {
 			<BugFilter onSetFilter={onSetFilter} filterBy={filterBy} />
 			<BugSort onSetSort={onSetSort} sortBy={sortBy} />
 			<button className="btn" onClick={onAddBug}>
-				Add Bug ⛐
+				Add Bug
 			</button>
-			<button className="btn-download" onClick={onDownloadBudsPdf}>
+			<button className="btn btn-download" onClick={onDownloadBudsPdf}>
 				Download PDF
 			</button>
 

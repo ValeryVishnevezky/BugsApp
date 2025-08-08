@@ -11,24 +11,23 @@ import { BugDetails } from './pages/BugDetails.jsx'
 import { UserProfile } from './pages/UserProfile.jsx'
 import { AdminDashboard } from './pages/AdminDashboard.jsx'
 
-
 export function App() {
-  return (
-    <Router>
-      <div className='app-container'>
-        <AppHeader />
-        <main>
-          <Routes>
-            <Route element={<HomePage />} path={'/'} />
-            <Route element={<BugIndex />} path={'/bug'} />
-            <Route element={<BugDetails />} path={'/bug/:bugId'} />
-            <Route element={<AboutUs />} path={'/about'} />
-            <Route element={<UserProfile />} path={'/user'} />
-            <Route element={<AdminDashboard />} path={'/admin'} />
-          </Routes>
-        </main>
-        <AppFooter />
-      </div>
-    </Router>
-  )
+	return (
+		<Router>
+			<div className='app-container'>
+				<AppHeader />
+				<main>
+					<Routes>
+						<Route element={<HomePage />} path={'/'} />
+						<Route element={<BugIndex />} path={'/bug'} />
+						<Route element={<BugDetails />} path={'/bug/:bugId'} />
+						<Route element={<AboutUs />} path={'/about'} />
+						<Route element={<UserProfile />} path={'/user'} />
+						<Route element={<AdminDashboard />} path={'/admin'} />
+					</Routes>
+				</main>
+				<AppFooter />
+			</div>
+		</Router>
+	)
 }

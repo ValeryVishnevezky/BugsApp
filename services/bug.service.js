@@ -29,6 +29,9 @@ function query(filterBy, sortBy) {
 		const labelsToFilter = filterBy.labels
 		bugs = bugs.filter((bug) => labelsToFilter.some((label) => bug.labels.includes(label)))
 	}
+	if (filterBy.userId) {
+		bugs = bugs.filter((bug) => bug.creator._id === filterBy.userId)
+	}
 
 	// sort
 	if (sortBy.type === 'createdAt') {
@@ -50,9 +53,10 @@ function query(filterBy, sortBy) {
 	return Promise.resolve({ bugs, totalPageSize })
 }
 
-function save(bug) {
+function save(bug, userId) {
 	console.log(bug)
 	if (bug._id) {
+		if (bug.creator._id !== userId) return Promise.reject('You can not update bug, another creator id')
 		const idx = gBugs.findIndex((currBug) => currBug._id === bug._id)
 		gBugs[idx] = bug
 	} else {
@@ -64,7 +68,8 @@ function save(bug) {
 
 function remove(bugId, userId) {
 	const idx = gBugs.findIndex((bug) => bug._id === bugId)
-	if (idx === -1) return Promise.reject('No bug found')
+	if (idx === -1) return Promise.reject('No bug found to remove')
+	if (gBugs[idx].creator._id !== userId) return Promise.reject('Can not remove bug, another creator id')
 	gBugs.splice(idx, 1)
 	return _saveBugsToFile()
 }
@@ -75,9 +80,9 @@ function getById(bugId) {
 	else return Promise.resolve(bug)
 }
 
-function getPdf() {
-	pdfService.buildBugsPDF(gBugs)
-	return Promise.resolve()
+function getPdf(res) {
+	pdfService.buildBugsPDF(res, gBugs)
+	return Promise.resolve(res)
 }
 
 function _saveBugsToFile() {
