@@ -59,7 +59,7 @@ function httpGet(url) {
 
 }
 
-function makeId(length = 5) {
+function makeId(length = 10) {
 	const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
 	var txt = ''
 	for (let i = 0; i < length; i++) {
