@@ -7,6 +7,7 @@ import { authService } from '../services/auth.service.js'
 export function AppHeader() {
 	const [user, setUser] = useState(authService.getLoggedInUser())
 	const [isLogin, setIsLogin] = useState(false)
+	const [isSignUp, setIsSignUp] = useState(false)
 	const navigate = useNavigate()
 
 	function onLogout() {
@@ -31,14 +32,14 @@ export function AppHeader() {
 						<button className="btn" onClick={() => setIsLogin(true)}>
 							Login
 						</button>
-						<button className="btn" onClick={() => setIsLogin(true)}>
+						<button className="btn" onClick={() => setIsSignUp(true)}>
 							Signup
 						</button>
-						{isLogin && (
+						{(isLogin || isSignUp) && (
 							<React.Fragment>
-								<div className="backdrop" onClick={() => setIsLogin(false)}></div>
+								<div className="backdrop" onClick={() => { setIsLogin(false); setIsSignUp(false); }}></div>
 								<section className="login-modal" onClick={(ev) => ev.stopPropagation()}>
-									<LoginSignup setUser={setUser} onClose={() => setIsLogin(false)} />
+									<LoginSignup setUser={setUser} isSignUp={isSignUp} onClose={() => { setIsLogin(false); setIsSignUp(false); }} />
 								</section>
 							</React.Fragment>
 						)}

@@ -2,34 +2,25 @@ export const userService = {
 	query,
 	remove,
 	getById,
-	getEmptyCredentials,
+	getEmptyCredentials
 }
 
-//* USER
 function query() {
-	return axios
-		.get('/api/user')
-		.then((res) => res.data)
-		.catch((err) => console.error(err))
+	return axios.get('/api/user').then(res => res.data)
 }
 
 function getById(userId) {
-	return axios
-		.get('/api/user/' + userId)
-		.then((res) => res.data)
-		.catch((err) => console.error(err))
+	return axios.get('/api/user/' + userId).then(res => res.data)
 }
 
 function remove(userId) {
-	return axios.delete('/api/user/' + userId).catch((err) => console.error(err))
+	return axios.delete('/api/user/' + userId)
 }
 
-//* USER frontend
 function getEmptyCredentials() {
 	return {
-		username: '',
-		password: '',
-		fullname: '',
+		username: 'admin',
+		password: 'admin',
+		fullname: 'Bugs Admin'
 	}
 }
-

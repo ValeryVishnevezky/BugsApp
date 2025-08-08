@@ -7,27 +7,22 @@ export const authService = {
 	getLoggedInUser
 }
 
-//* USER Authentication
 function signup(signupInfo) {
-	return axios
-		.post('/api/auth/signup', signupInfo)
+	return axios.post('/api/auth/signup', signupInfo)
 		.then(res => res.data)
 		.then(user => {
 			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(user))
 			return user
 		})
-		.catch(err => console.error(err))
 }
 
 function login(credentials) {
-	return axios
-		.post('/api/auth/login', credentials)
+	return axios.post('/api/auth/login', credentials)
 		.then(res => res.data)
 		.then(user => {
 			sessionStorage.setItem(STORAGE_KEY, JSON.stringify(user))
 			return user
 		})
-		.catch(err => console.error(err))
 }
 
 function logout() {

@@ -16,8 +16,7 @@ export function BugIndex() {
 	}, [filterBy, sortBy])
 
 	function loadBugs() {
-		bugService
-			.query(filterBy, sortBy)
+		bugService.query(filterBy, sortBy)
 			.then(({ bugs, totalPageSize }) => {
 				setBugs(bugs)
 				setTotalPageSize(totalPageSize)
@@ -47,8 +46,7 @@ export function BugIndex() {
 	}
 
 	function onRemoveBug(bugId) {
-		bugService
-			.remove(bugId)
+		bugService.remove(bugId)
 			.then(() => {
 				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
@@ -63,13 +61,12 @@ export function BugIndex() {
 	function onAddBug() {
 		const bug = {
 			title: prompt('Bug title?'),
-			severity: +prompt('Bug severity?'),
+			severity: +prompt('Bug severity?')
 		}
 
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
 
-		bugService
-			.save(bug)
+		bugService.save(bug)
 			.then(savedBug => {
 				setBugs(prevBugs => [...prevBugs, savedBug])
 				showSuccessMsg('Bug added')
@@ -84,8 +81,7 @@ export function BugIndex() {
 	function onEditBug(bug) {
 		const severity = +prompt('New severity?')
 		const bugToSave = { ...bug, severity }
-		bugService
-			.save(bugToSave)
+		bugService.save(bugToSave)
 			.then(savedBug => {
 				setBugs(prevBugs => prevBugs.map(currBug => (currBug._id === savedBug._id ? savedBug : currBug)))
 				showSuccessMsg('Bug updated')
@@ -97,9 +93,8 @@ export function BugIndex() {
 			})
 	}
 
-	function onDownloadBudsPdf() {
-		bugService
-			.downloadBudsPdf()
+	function onDownloadBugsPdf() {
+		bugService.downloadBugsPdf()
 			.then(pdfBlob => {
 				const url = window.URL.createObjectURL(pdfBlob)
 				const link = document.createElement('a')
@@ -117,35 +112,27 @@ export function BugIndex() {
 	}
 
 	return (
-		<section className='main-layout'>
-			<BugFilter onSetFilter={onSetFilter} filterBy={filterBy} />
-			<BugSort onSetSort={onSetSort} sortBy={sortBy} />
-			<button className='btn' onClick={onAddBug}>
-				Add Bug
-			</button>
-			<button className='btn btn-download' onClick={onDownloadBudsPdf}>
-				Download PDF
-			</button>
+		<section className='main-layout main-layout-bugs'>
+			<div>
+				<BugFilter onSetFilter={onSetFilter} filterBy={filterBy} />
+				<section className='sort-act-container'>
+					<BugSort onSetSort={onSetSort} sortBy={sortBy} />
+					<div>
+						{/* prettier-ignore */}
+						<button className='btn' onClick={onAddBug}>Add Bug</button>
+						{/* prettier-ignore */}
+						<button className='btn btn-download' onClick={onDownloadBugsPdf}>Download PDF</button>
+					</div>
+				</section>
+				<BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+			</div>
 
-			<BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
 			<div className='paging flex'>
-				<button
-					className='btn'
-					onClick={() => {
-						onChangePageIdx(-1)
-					}}
-				>
-					Previous
-				</button>
+				{/* prettier-ignore */}
+				<button className='btn' onClick={() => onChangePageIdx(-1)}>Prev</button>
 				<span>{filterBy.pageIdx + 1}</span>
-				<button
-					className='btn'
-					onClick={() => {
-						onChangePageIdx(1)
-					}}
-				>
-					Next
-				</button>
+				{/* prettier-ignore */}
+				<button className='btn' onClick={() => onChangePageIdx(1)}>Next</button>
 			</div>
 		</section>
 	)

@@ -40,6 +40,12 @@
 	border-radius: 3px;
 }
 
+.form input:focus {
+	outline: none;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 8px 0 rgba(var(--primary-color-rgb), 0.2);
+}
+
 .btns {
 	display: flex;
 	align-items: center;

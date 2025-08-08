@@ -1,7 +1,7 @@
 import Cryptr from 'cryptr'
 import { userService } from './user.service.js'
 
-const crypt = new Cryptr(process.env.SECRET)
+const crypt = new Cryptr(process.env.SECRET || 'default_secret')
 
 export const authService = {
 	checkLogin,

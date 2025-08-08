@@ -2,14 +2,12 @@ import { userService } from '../services/user.service.js'
 
 const { useState } = React
 
-export function LoginForm({ onLoginSignup, isSignup, setIsSignUp }) {
+export function LoginForm({ onLoginSignup, isSignup, setIsSignup }) {
 	const [credentials, setCredentials] = useState(userService.getEmptyCredentials())
 
 	function handleChange({ target }) {
 		const { name: field, value } = target
-		setCredentials((prevState) => {
-			return { ...prevState, [field]: value }
-		})
+		setCredentials(prevState =>  ({ ...prevState, [field]: value }))
 	}
 
 	function handleSubmit(ev) {
@@ -25,7 +23,7 @@ export function LoginForm({ onLoginSignup, isSignup, setIsSignUp }) {
 			{isSignup && <input type="text" name="fullname" value={credentials.fullname} placeholder="Full name" onChange={handleChange} required />}
 
 			<div className="btns">
-				<a className="btn" href="#" onClick={() => setIsSignUp()}>
+				<a className="btn" href="#" onClick={() => setIsSignup()}>
 					{isSignup ? 'Already a member? Login' : 'New user? Signup here'}
 				</a>
 				<button className="btn">{isSignup ? 'Signup' : 'Login'}</button>

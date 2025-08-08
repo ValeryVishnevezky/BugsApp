@@ -1,6 +1,6 @@
 .user-msg {
   position: fixed;
-  top: 120px;
+  top: 100px;
   left: 50%;
   transform: translateX(-50%);
   background-color: white;
@@ -11,8 +11,8 @@
   align-items: center;
   justify-content: space-between;
   width: 300px;
-  z-index: 2000;
-  animation: fadeInOut 2.5s;
+  z-index: 20;
+  animation: fadeInOut 2.5s ease-in-out;
 }
 
 @keyframes fadeInOut {

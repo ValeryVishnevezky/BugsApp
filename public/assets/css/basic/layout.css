@@ -1,15 +1,25 @@
 .main-layout {
-  max-width: 80vw;
-  margin: 1rem auto;
+	min-height: 100%;
+	max-width: 80vw;
+	margin: 0 auto;
+}
+
+.main-layout-bugs {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
 }
 
 .paging {
-  width: 200px;
-  margin-block-start: 1rem;
-  justify-content: space-between;
+	width: 200px;
+	margin-block-start: 1rem;
+	font-size: 1.1rem;
+	/* display: flex; */
+	align-self: center;
+	justify-content: space-between;
 }
 
 .paging span {
-  font-weight: 500;
-  color: var(--primary-color);
+	font-family: Roboto-bold, sans-serif;
+	color: var(--primary-color);
 }

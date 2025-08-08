@@ -10,33 +10,25 @@ export const bugService = {
 	remove,
 	getDefaultFilter,
 	getDefaultSort,
-	downloadBudsPdf,
+	downloadBugsPdf
 }
 
 function query(filterBy = { title: '', minSeverity: '', labels: '', pageIdx: 0, userId: '' }, sortBy = { type: '', desc: 1 }) {
 	const filterSortBy = { ...filterBy, ...sortBy }
-	return axios
-		.get(BASE_URL, { params: filterSortBy })
-		.then(res => res.data)
-		.catch(err => console.error(err))
+	return axios.get(BASE_URL, { params: filterSortBy }).then(res => res.data)
 }
 
 function getById(bugId) {
-	return axios
-		.get(BASE_URL + bugId)
-		.then(res => res.data)
-		.catch(err => console.error(err))
+	return axios.get(BASE_URL + bugId).then(res => res.data)
 }
 
 function remove(bugId) {
-	return axios.delete(BASE_URL + bugId).catch(err => console.error(err))
+	return axios.delete(BASE_URL + bugId)
 }
 
 function save(bug) {
-	const method = bug._id ? 'put' : 'post'	
-	return axios[method](BASE_URL, bug)
-		.then(res => res.data)
-		.catch(err => console.error(err))
+	const method = bug._id ? 'put' : 'post'
+	return axios[method](BASE_URL, bug).then(res => res.data)
 }
 
 function getDefaultFilter() {
@@ -47,9 +39,6 @@ function getDefaultSort() {
 	return { type: '', desc: 1 }
 }
 
-function downloadBudsPdf() {
-	return axios
-		.get(BASE_URL + 'pdf', { responseType: 'blob' })
-		.then(res => res.data)
-		.catch(err => console.error(err))
+function downloadBugsPdf() {
+	return axios.get(BASE_URL + 'pdf', { responseType: 'blob' }).then(res => res.data)
 }

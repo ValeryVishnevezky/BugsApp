@@ -5,45 +5,45 @@ import { LoginForm } from './LoginForm.jsx'
 const { useState } = React
 const { useNavigate } = ReactRouterDOM
 
-export function LoginSignup({ setUser, onClose }) {
-	const [isSignup, setIsSignUp] = useState(false)
+export function LoginSignup({ setUser, isSignUp, onClose }) {
+	const [isSignup, setIsSignup] = useState(isSignUp)
 	const navigate = useNavigate()
 
 	function onLoginSignup(credentials) {
 		isSignup ? onSignup(credentials) : onLogin(credentials)
-		onClose()
-		navigate('/bug')
 	}
 
 	function onLogin(credentials) {
-		authService
-			.login(credentials)
-			.then(setUser)
-			.then(() => {
+		authService.login(credentials)
+			.then(user => {
+				setUser(user)
+				onClose()
+				navigate('/bug')
 				showSuccessMsg('Logged in successfully')
 			})
 			.catch(err => {
 				console.log('err', err)
-				showErrorMsg('Oops try again')
+				showErrorMsg('Invalid username or password')
 			})
 	}
 
 	function onSignup(credentials) {
-		authService
-			.signup(credentials)
-			.then(setUser)
-			.then(() => {
+		authService.signup(credentials)
+			.then(user => {
+				setUser(user)
+				onClose()
+				navigate('/bug')
 				showSuccessMsg('Signed in successfully')
 			})
 			.catch(err => {
 				console.log('err', err)
-				showErrorMsg('Oops try again')
+				showErrorMsg('User already exists, please login')
 			})
 	}
 
 	return (
 		<section className='login'>
-			<LoginForm onLoginSignup={onLoginSignup} isSignup={isSignup} setIsSignUp={() => setIsSignUp(prev => !prev)} />
+			<LoginForm onLoginSignup={onLoginSignup} isSignup={isSignup} setIsSignup={() => setIsSignup(prev => !prev)} />
 		</section>
 	)
 }

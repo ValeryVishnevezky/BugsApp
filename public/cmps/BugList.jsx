@@ -3,7 +3,7 @@ const { Link } = ReactRouterDOM
 
 export function BugList({ bugs, onRemoveBug, onEditBug }) {
   return (
-    <section className="bug-list grid cards">
+    <section className="bug-list grid center justify-self cards">
       {bugs.map(bug => (
         <article className="bug-preview card" key={bug._id}>
           <BugPreview bug={bug} />

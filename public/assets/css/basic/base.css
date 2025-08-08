@@ -1,23 +1,40 @@
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-decoration: none;
+	font-family: Roboto-regular, sans-serif;
+	font-weight: normal;
+	color: var(--gray1);
 }
 
 body {
-  line-height: 1.4;
-  font-family: Roboto-regular, sans-serif;
+	line-height: 1.4;
+	/* font-family: Roboto-regular, sans-serif; */
 }
 
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
 }
 
 main {
-  flex-grow: 2;
-  padding: 1rem;
+	flex-grow: 2;
+	padding: 2rem 1rem;
+}
+
+h1 {
+	font-family: Roboto-bold, sans-serif;
+}
+
+.card h1 {
+	font-size: 1.2rem;
+	font-family: Roboto-bold, sans-serif;
+}
+
+.card h2 {
+	font-size: 1rem;
+	font-family: Roboto-bold, sans-serif;
 }

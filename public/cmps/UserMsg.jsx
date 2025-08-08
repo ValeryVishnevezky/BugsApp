@@ -1,11 +1,10 @@
 import { eventBusService } from '../services/event.bus.service.js'
-const { useState, useEffect } = React
+const { useState, useEffect, useRef } = React
 
 export function UserMsg() {
 	const [msg, setMsg] = useState(null)
 
 	useEffect(() => {
-		// Here we listen to the event that we emited, its important to remove the listener
 		const removeEvent = eventBusService.on('show-user-msg', msg => {
 			setMsg(msg)
 			setTimeout(() => {
@@ -20,14 +19,8 @@ export function UserMsg() {
 	const msgClass = msg.type || ''
 	return (
 		<section className={'user-msg ' + msgClass}>
-			<button
-				onClick={() => {
-					setMsg(null)
-				}}
-			>
-				x
-			</button>
 			{msg.txt}
+			<button onClick={() => { setMsg(null) }}>⨉</button>
 		</section>
 	)
 }

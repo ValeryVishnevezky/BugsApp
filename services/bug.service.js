@@ -12,7 +12,7 @@ export const bugService = {
 	getPdf,
 }
 
-const PAGE_SIZE = 3
+const PAGE_SIZE = 6
 
 function query(filterBy, sortBy) {
 	var bugs = [...gBugs]
@@ -45,7 +45,7 @@ function query(filterBy, sortBy) {
 	const totalPageSize = Math.ceil(bugs.length / PAGE_SIZE) - 1
 
 	// SS - Pagination~
-	if (filterBy.pageIdx !== null) {
+	if (filterBy.pageIdx !== null && !filterBy.userId) {
 		const startIdx = filterBy.pageIdx * PAGE_SIZE
 		bugs = bugs.slice(startIdx, startIdx + PAGE_SIZE)
 	}

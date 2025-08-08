@@ -14,7 +14,7 @@
 .nav-bar a {
   text-decoration: none;
   color: inherit;
-  font-weight: 600;
+  font-family: Roboto-regular, sans-serif;
   transition: all 0.3s;
 }
 

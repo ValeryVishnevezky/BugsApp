@@ -1,13 +1,17 @@
 .label-selector {
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px 0;
-  max-width: 300px;
+  padding: 5px 10px;
+  /* margin: 10px 0; */
+  width: 45%;
+  max-height: 106px;
+  overflow-y: auto;
+  scrollbar-color: var(--primary-color) transparent;
+  scrollbar-width: thin;
 }
 
 .label-selector div {
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   padding: 5px;
   display: flex;
   align-items: center;
@@ -22,4 +26,14 @@
   margin-left: 5px;
   font-size: 16px;
   cursor: pointer;
+}
+
+.label-selector > div:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 600px) {
+  .label-selector {
+    width: 100%;
+  }
 }
