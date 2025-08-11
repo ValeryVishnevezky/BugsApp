@@ -1,52 +1,43 @@
 const { useState, useEffect } = React
+const { useSelector, useDispatch } = ReactRedux
 import { BugFilter } from '../cmps/BugFilter.jsx'
 import { BugList } from '../cmps/BugList.jsx'
 import { BugSort } from '../cmps/BugSort.jsx'
 import { bugService } from '../services/bug.service.js'
+import { bugActions } from '../store/actions/bug.actions.js'
+import { SET_FILTER, SET_SORT } from '../store/reducers/bug.reducer.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event.bus.service.js'
 
 export function BugIndex() {
-	const [bugs, setBugs] = useState([])
-	const [filterBy, setFilterBy] = useState(bugService.getDefaultFilter())
-	const [sortBy, setSortBy] = useState(bugService.getDefaultSort())
-	const [totalPageSize, setTotalPageSize] = useState(null)
+	const dispatch = useDispatch()
+	const loggedinUser = useSelector(state => state.authModule.loggedinUser)
+	const bugs = useSelector(state => state.bugModule.bugs)
+	const totalPageSize = useSelector(state => state.bugModule.totalPageSize)
+	const filterBy = useSelector(state => state.bugModule.filterBy)
+	const sortBy = useSelector(state => state.bugModule.sortBy)
 
 	useEffect(() => {
-		loadBugs()
+		bugActions.query()
 	}, [filterBy, sortBy])
 
-	function loadBugs() {
-		bugService.query(filterBy, sortBy)
-			.then(({ bugs, totalPageSize }) => {
-				setBugs(bugs)
-				setTotalPageSize(totalPageSize)
-			})
-			.catch(err => {
-				console.log('from load bugs')
-				console.error('Error: Something went wrong with load bugs \n', err)
-				showErrorMsg('Cannot load bugs')
-			})
-	}
-
 	function onSetFilter(filterBy) {
-		setFilterBy(prevFilter => ({ ...prevFilter, ...filterBy }))
+		dispatch({ type: SET_FILTER, filterBy })
 	}
 
 	function onSetSort(sortBy) {
-		setSortBy(prevSort => ({ ...prevSort, ...sortBy }))
+		dispatch({ type: SET_SORT, sortBy })
 	}
 
 	function onChangePageIdx(diff) {
-		setFilterBy(prevFilter => {
-			let newPageIdx = prevFilter.pageIdx + diff
-			if (newPageIdx < 0) newPageIdx = totalPageSize
-			if (newPageIdx > totalPageSize) newPageIdx = 0
-			return { ...prevFilter, pageIdx: newPageIdx }
-		})
+		let newPageIdx = filterBy.pageIdx + diff
+		if (newPageIdx < 0) newPageIdx = totalPageSize
+		if (newPageIdx > totalPageSize) newPageIdx = 0
+		dispatch({ type: SET_FILTER, filterBy: { ...filterBy, pageIdx: newPageIdx } })
 	}
 
 	function onRemoveBug(bugId) {
-		bugService.remove(bugId)
+		bugService
+			.remove(bugId)
 			.then(() => {
 				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
@@ -54,7 +45,8 @@ export function BugIndex() {
 			.catch(err => {
 				console.log('from remove bug')
 				console.error('Error: Something went wrong with remove bug \n', err)
-				showErrorMsg('Cannot remove bug')
+				if (loggedinUser) showErrorMsg('Cannot remove bug')
+				if (!loggedinUser) showErrorMsg('Please sign in to remove a bug')
 			})
 	}
 
@@ -66,7 +58,8 @@ export function BugIndex() {
 
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
 
-		bugService.save(bug)
+		bugService
+			.save(bug)
 			.then(savedBug => {
 				setBugs(prevBugs => [...prevBugs, savedBug])
 				showSuccessMsg('Bug added')
@@ -74,14 +67,16 @@ export function BugIndex() {
 			.catch(err => {
 				console.log('from add bug')
 				console.error('Error: Something went wrong with add bug \n', err)
-				showErrorMsg('Cannot add bug')
+				if (loggedinUser) showErrorMsg('Cannot add bug')
+				if (!loggedinUser) showErrorMsg('Please sign in to add a bug')
 			})
 	}
 
 	function onEditBug(bug) {
 		const severity = +prompt('New severity?')
 		const bugToSave = { ...bug, severity }
-		bugService.save(bugToSave)
+		bugService
+			.save(bugToSave)
 			.then(savedBug => {
 				setBugs(prevBugs => prevBugs.map(currBug => (currBug._id === savedBug._id ? savedBug : currBug)))
 				showSuccessMsg('Bug updated')
@@ -89,12 +84,14 @@ export function BugIndex() {
 			.catch(err => {
 				console.log('from edit bug')
 				console.error('Error: Something went wrong with edit bug \n', err)
-				showErrorMsg('Cannot update bug')
+				if (loggedinUser) showErrorMsg('Cannot update bug')
+				if (!loggedinUser) showErrorMsg('Please sign in to update a bug')
 			})
 	}
 
 	function onDownloadBugsPdf() {
-		bugService.downloadBugsPdf()
+		bugService
+			.downloadBugsPdf()
 			.then(pdfBlob => {
 				const url = window.URL.createObjectURL(pdfBlob)
 				const link = document.createElement('a')
@@ -124,7 +121,7 @@ export function BugIndex() {
 						<button className='btn btn-download' onClick={onDownloadBugsPdf}>Download PDF</button>
 					</div>
 				</section>
-				<BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />
+				{bugs.length === 0 ? <h1 className='no-bugs'>No bugs to show</h1> : <BugList bugs={bugs} onRemoveBug={onRemoveBug} onEditBug={onEditBug} />}
 			</div>
 
 			<div className='paging flex'>

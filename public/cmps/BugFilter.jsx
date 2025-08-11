@@ -2,7 +2,7 @@ const { useState, useEffect } = React
 import { LabelSelector } from './LabelSelect.jsx'
 
 export function BugFilter({ onSetFilter, filterBy }) {
-	const [filterByToEdit, setFilterByToEdit] = useState(filterBy)
+	const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy })
 	const labels = ['critical', 'need-CR', 'dev-branch', 'famous', 'high']
 
 	useEffect(() => {
@@ -23,8 +23,8 @@ export function BugFilter({ onSetFilter, filterBy }) {
 	return (
 		<form className='bug-filter'>
 			<section>
-				<input className='filter-input' type='text' id='txt' name='txt' value={txt} placeholder='Enter text here...' onChange={handleChange} />
-				<input placeholder='Enter severity here..' className='filter-input' type='text' id='severity' name='severity' value={severity} onChange={handleChange} />
+				<input className='filter-input' type='text' id='txt' name='txt' value={txt || ''} placeholder='Enter text here...' onChange={handleChange} />
+				<input placeholder='Enter severity here..' className='filter-input' type='text' id='severity' name='severity' value={severity || ''} onChange={handleChange} />
 			</section>
 			<LabelSelector labels={labels} onLabelChange={onLabelChange} />
 		</form>

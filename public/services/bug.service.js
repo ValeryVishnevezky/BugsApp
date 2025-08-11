@@ -15,7 +15,8 @@ export const bugService = {
 
 function query(filterBy = { title: '', minSeverity: '', labels: '', pageIdx: 0, userId: '' }, sortBy = { type: '', desc: 1 }) {
 	const filterSortBy = { ...filterBy, ...sortBy }
-	return axios.get(BASE_URL, { params: filterSortBy }).then(res => res.data)
+	return axios.get(BASE_URL, { params: filterSortBy })
+	.then(res => res.data)
 }
 
 function getById(bugId) {
