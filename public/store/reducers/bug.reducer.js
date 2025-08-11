@@ -5,6 +5,7 @@ export const SET_BUG = 'SET_BUG'
 export const SET_PAGE_SIZE = 'SET_PAGE_SIZE'
 export const DELETE_BUG = 'DELETE_BUG'
 export const UPDATE_BUG = 'UPDATE_BUG'
+export const ADD_BUG = 'ADD_BUG'
 export const SET_FILTER = 'SET_FILTER'
 export const SET_SORT = 'SET_SORT'
 
@@ -31,7 +32,10 @@ export function bugReducer(state = initState, action) {
 			return { ...state, bugs: state.bugs.filter(bug => bug._id !== action.bugId) }
 
 		case UPDATE_BUG:
-			return { ...state, bugs: action.bugs.map(bug => (bug._id === action.bug._id ? action.bug : bug)) }
+			return { ...state, bugs: state.bugs.map(bug => (bug._id === action.bug._id ? action.bug : bug)) }
+
+		case ADD_BUG:
+			return { ...state, bugs: [...action.bug, ...state.bugs] }
 
 		case SET_FILTER:
 			return { ...state, filterBy: action.filterBy }

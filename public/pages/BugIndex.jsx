@@ -36,10 +36,9 @@ export function BugIndex() {
 	}
 
 	function onRemoveBug(bugId) {
-		bugService
+		bugActions
 			.remove(bugId)
 			.then(() => {
-				setBugs(prevBugs => prevBugs.filter(bug => bug._id !== bugId))
 				showSuccessMsg('Bug removed')
 			})
 			.catch(err => {
@@ -58,10 +57,9 @@ export function BugIndex() {
 
 		if (!bug.title || !bug.severity) return showErrorMsg('Please enter title and severity')
 
-		bugService
+		bugActions
 			.save(bug)
-			.then(savedBug => {
-				setBugs(prevBugs => [...prevBugs, savedBug])
+			.then(() => {
 				showSuccessMsg('Bug added')
 			})
 			.catch(err => {
@@ -75,10 +73,9 @@ export function BugIndex() {
 	function onEditBug(bug) {
 		const severity = +prompt('New severity?')
 		const bugToSave = { ...bug, severity }
-		bugService
+		bugActions
 			.save(bugToSave)
-			.then(savedBug => {
-				setBugs(prevBugs => prevBugs.map(currBug => (currBug._id === savedBug._id ? savedBug : currBug)))
+			.then(() => {
 				showSuccessMsg('Bug updated')
 			})
 			.catch(err => {

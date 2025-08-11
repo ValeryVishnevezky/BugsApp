@@ -1,18 +1,20 @@
 const { Link, useParams } = ReactRouterDOM
 const { useState, useEffect } = React
-import { bugService } from '../services/bug.service.js'
+const { useSelector } = ReactRedux
+// import { bugService } from '../services/bug.service.js'
+import { bugActions } from '../store/actions/bug.actions.js'
+import { showSuccessMsg, showErrorMsg } from '../services/event.bus.service.js'
 
 export function BugDetails() {
-	const [bug, setBug] = useState(null)
+	const bug = useSelector(state => state.bugModule.bug)
 	const { bugId } = useParams()
 
 	useEffect(() => {
-		bugService.getById(bugId)
-			.then((bug) => setBug(bug))
+		bugActions.getById(bugId)
 			.catch((err) => {
 				console.log('from load bug details')
-				console.error('Error: Something went wrong with load user bugs \n', err)
-				showErrorMsg('Cannot load your bugs')
+				console.error('Error: Something went wrong with load bug \n', err)
+				showErrorMsg('Cannot load bug')
 			})
 			.catch((err) => {
 				console.log('Error is:', err)
