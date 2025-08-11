@@ -1,10 +1,10 @@
 export const SET_USERS = 'SET_USERS'
-export const SET_LOGGEDIN_USER = 'SET_LOGGEDIN_USER'
-export const LOGOUT_USER = 'LOGOUT_USER'
+export const SET_USER = 'SET_USER'
+export const DELETE_USER = 'DELETE_USER'
 
 const initState = {
 	users: [],
-	loggedinUser: null,
+	user: null
 }
 
 export function userReducer(state = initState, action) {
@@ -12,11 +12,11 @@ export function userReducer(state = initState, action) {
 		case SET_USERS:
 			return { ...state, users: action.users }
 
-		case SET_LOGGEDIN_USER:
-			return { ...state, loggedinUser: action.loggedinUser }
+		case SET_USER:
+			return { ...state, users: action.users }
 
-		case LOGOUT_USER:
-			return { ...state, loggedinUser: null }
+		case DELETE_USER:
+			return { ...state, users: state.users.filter(user => user._id !== action.userId) }
 
 		default:
 			return state

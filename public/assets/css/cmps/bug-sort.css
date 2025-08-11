@@ -1,8 +1,11 @@
 .sort-act-container {
+	justify-self: center;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	margin: 20px 0;
+	width: 100%;
+	max-width: 850px;
 }
 
 .bug-sort {
